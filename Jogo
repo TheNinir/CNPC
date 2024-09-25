@@ -1,0 +1,205 @@
+var r1 = Math.floor(Math.random() * 20) + 60;
+var r2 = Math.floor(Math.random() * 200) + 100;
+
+function damaged(e){
+//e.npc.timers.forceStart(10,30,false);
+var r1 = Math.floor(Math.random() * 20) + 10;
+var move = [3,4,7];
+var r2 = Math.floor(Math.random() * 3) + 0;
+//if(!e.npc.timers.has(2)){
+e.npc.timers.forceStart(move[r2],r1,false);
+//e.npc.say(r2+"-"+r1);ac
+//}
+//else{e.npc.say("CD");}
+}
+
+function init(e){
+hit = 0;
+}
+
+var hit = 0;
+function meleeAttack(e){
+if(hit == 0){
+e.npc.swingMainhand();
+hit = 1;
+}
+else{
+e.npc.swingOffhand
+hit = 0;
+}
+}
+
+
+function timer(e){
+var handL = e.npc.getJob().getPart(1);
+var handR = e.npc.getJob().getPart(2);
+var body = e.npc.getJob().getPart(3);
+var legL = e.npc.getJob().getPart(4);
+var legR = e.npc.getJob().getPart(5);
+var head = e.npc.getJob().getPart(0);
+var handLq = e.npc.getJob().getPart(7);
+var handRq = e.npc.getJob().getPart(8);
+var bodyq = e.npc.getJob().getPart(9);
+var legLq = e.npc.getJob().getPart(10);
+var legRq = e.npc.getJob().getPart(11);
+var headq = e.npc.getJob().getPart(6);
+var rot = e.npc.getRotation();
+var pit = -(e.npc.getPitch())
+
+if(e.id ==1){
+e.npc.ai.setWalkingSpeed(6);
+e.npc.stats.melee.setRange(3);
+e.npc.stats.melee.setDelay(17);
+body.setRotation(180,180,180);
+head.setRotation(180,180,180);
+handL.setRotation(180,180,180);
+handR.setRotation(180,180,180);
+legL.setRotation(180,180,180);
+legR.setRotation(180,180,180);
+bodyq.setRotation(180,180,180);
+headq.setRotation(180,180,180);
+handLq.setRotation(180,180,180);
+handRq.setRotation(180,180,180);
+legLq.setRotation(180,180,180);
+legRq.setRotation(180,180,180);
+e.npc.updateClient();
+}
+
+if(e.id == 2){
+
+}
+
+if(e.id == 3){
+if(!e.npc.timers.has(2)){
+handL.setRotation(140,230,180);
+handR.setRotation(140,130,180);
+e.npc.ai.setWalkingSpeed(0);
+e.npc.stats.melee.setRange(0);
+e.npc.say("Flameray");
+e.npc.updateClient();
+e.npc.timers.forceStart(4,25,false);
+e.npc.timers.forceStart(2,100,false);
+}
+}
+
+if(e.id == 4){
+var rot = e.npc.getRotation();
+var pit = -e.npc.getPitch();
+var d = Vectors(rot*Math.PI/180,pit*Math.PI/180,2);
+for(var i = 0;i<20;i+=0.5){
+var x = e.npc.x;
+var y = e.npc.y;
+var z = e.npc.z;
+e.npc.world.spawnParticle("flame",d[0]*i+x,d[1]*i+y+1,d[2]*i+z,0,0,0,0,90);
+var ent = e.npc.world.getNearbyEntities(d[0]*i+x,d[1]*i+y,d[2]*i+z,1,5);
+for(var j=0;j<ent.length;j++){
+if(ent[j].UUID == e.npc.UUID){
+continue;
+ }
+ if(ent[j] != null){
+ent[j].damage(30);
+}
+}}
+e.npc.timers.forceStart(1,23,false);
+e.npc.world.playSoundAt(e.npc.getPos(),"minecraft:block.fire.extinguish",1,1);
+}
+
+if(e.id == 5){
+if(!e.npc.timers.has(2)){
+e.npc.ai.setWalkingSpeed(0);
+e.npc.stats.melee.setRange(0);
+handL.setRotation(150,120,180);
+handR.setRotation(150,240,180);
+e.npc.say("Volcanic Eruption");
+e.npc.updateClient();
+e.npc.timers.forceStart(6,25,false);
+e.npc.timers.forceStart(2,120,false);
+}
+e.npc.updateClient();
+}
+
+if(e.id == 6){
+var rot = e.npc.getRotation();
+var pit = e.npc.getPitch();
+ var x = e.npc.x;
+var y = e.npc.y;
+var z = e.npc.z;
+for(var a = 0;a<=5;a++){
+for(var aa = 0;aa<=9;aa++){
+for(var i = 0;i<=36;i++){
+var V = Circles(rot+i*10,rot*aa*10,a);
+e.npc.world.spawnParticle("flame",V[0]+x,V[1]+y+1,V[2]+z,0,0,0,0,1);
+var ent = e.npc.world.getNearbyEntities(V[0]+x,V[1]+y+1,V[2]+z,2,5);
+for(var j=0;j<ent.length;j++){
+ if(ent[j].UUID == e.npc.UUID){
+continue;
+}
+
+ent[j].damage(30);
+}}}}
+e.npc.timers.forceStart(1,25,false);
+e.npc.world.playSoundAt(e.npc.getPos(),"minecraft:block.fire.extinguish",1,1);
+}
+
+if(e.id == 7){
+if(!e.npc.timers.has(2)){
+e.npc.ai.setWalkingSpeed(0);
+e.npc.stats.melee.setRange(0);
+e.npc.say("MAXIMUM METEOR");
+e.npc.timers.forceStart(8,25,false);
+e.npc.timers.forceStart(2,180,false);
+e.npc.world.playSoundAt(e.npc.getPos(),"minecraft:block.fire.extinguish",3,2);
+}
+}
+
+if(e.id == 8){
+e.API.clones.spawn(e.npc.x,e.npc.y+20,e.npc.z,1,"Maximum Meteor",e.npc.world);
+e.npc.setPosition(e.npc.x,e.npc.y+25,e.npc.z);
+}
+
+if(e.id == 9){
+
+}
+
+if(e.id == 10){
+
+}
+
+}
+
+
+
+function shootProjectile(e,projectile,name,dmg,pos1,pos2,pos3){
+var P = e.world.createEntity('customnpcs:customnpcprojectile')
+var item = e.world.createItem(projectile,1);
+item.setCustomName(name);
+P.setName(name);
+var d = Vectors((e.getRotation())*Math.PI/180,((-e.getPitch())*Math.PI/180),10);
+P.setItem(item);
+P.setPosition(e.x+pos1,e.y+pos2,e.z+pos3);
+var n = P.getEntityNbt();
+n.setFloat("damagev2",dmg);
+n.setInteger("size",10);
+//n.setFloat(n.getCompound("Rotation")[0],90.0);
+P.setEntityNbt(n);
+e.world.spawnEntity(P);
+P.enableEvents();
+//log(n.toJsonString());
+}
+
+function Vectors(angle,pitch,distance){
+var dx = -Math.sin(angle)*(distance*Math.cos(pitch));
+var dy = Math.sin(pitch)*distance;
+var dz = Math.cos(angle)*(distance*Math.cos(pitch));
+return [dx,dy,dz]
+}
+
+
+function Circles(angle,pitch,distance){
+var a = angle*Math.PI/180;
+var b = pitch*Math.PI/180;
+var dx = -Math.sin(a)*distance*Math.cos(b);
+var dy = Math.sin(b)*distance
+var dz = Math.cos(a)*distance*Math.cos(b);
+return [dx,dy,dz];
+}
