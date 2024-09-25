@@ -203,3 +203,53 @@ var dy = Math.sin(b)*distance
 var dz = Math.cos(a)*distance*Math.cos(b);
 return [dx,dy,dz];
 }
+
+
+
+
+
+
+//MAXIMUM METEOR
+function tick(e){
+if(e.npc.world.getBlock(e.npc.x,e.npc.y-1,e.npc.z).getName() != "minecraft:air"){
+var rot = e.npc.getRotation();
+var pit = e.npc.getPitch();
+ var x = e.npc.x;
+var y = e.npc.y;
+var z = e.npc.z;
+for(var a = 0;a<=8;a++){
+for(var i = 0;i<=36;i++){
+var V = Circles(rot+i*10,5,a);
+e.npc.world.spawnParticle("explosion",V[0]+x,V[1]+y+1,V[2]+z,0,0,0,0,1);
+var ent = e.npc.world.getNearbyEntities(V[0]+x,V[1]+y+1,V[2]+z,2,5);
+for(var j=0;j<ent.length;j++){
+ if(ent[j].UUID == e.npc.UUID){
+continue;
+}
+if(ent[j].getName() == "Jogo"){
+continue;
+}
+ent[j].damage(50);
+}}}
+e.npc.despawn();
+}
+}
+
+
+
+function Vectors(angle,pitch,distance){
+var dx = -Math.sin(angle)*(distance*Math.cos(pitch));
+var dy = Math.sin(pitch)*distance;
+var dz = Math.cos(angle)*(distance*Math.cos(pitch));
+return [dx,dy,dz]
+}
+
+
+function Circles(angle,pitch,distance){
+var a = angle*Math.PI/180;
+var b = pitch*Math.PI/180;
+var dx = -Math.sin(a)*distance*Math.cos(b);
+var dy = Math.sin(b)*distance
+var dz = Math.cos(a)*distance*Math.cos(b);
+return [dx,dy,dz];
+}
