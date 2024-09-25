@@ -5,11 +5,11 @@ function damaged(e){
 //e.npc.timers.forceStart(10,30,false);
 var r1 = Math.floor(Math.random() * 20) + 10;
 var move = [3,4,7];
-var r2 = Math.floor(Math.random() * 3) + 0;
-//if(!e.npc.timers.has(2)){
+var r2 = Math.floor(Math.random() * 4) + 0;
+if(!e.npc.timers.has(2)){
 e.npc.timers.forceStart(move[r2],r1,false);
 //e.npc.say(r2+"-"+r1);ac
-//}
+}
 //else{e.npc.say("CD");}
 }
 
@@ -203,7 +203,6 @@ var dy = Math.sin(b)*distance
 var dz = Math.cos(a)*distance*Math.cos(b);
 return [dx,dy,dz];
 }
-
 
 
 
