@@ -1,0 +1,59 @@
+function init(e){
+e.npc.timers.forceStart(1,1,true);
+e.npc.timers.forceStart(2,100,false);
+e.npc.timers.forceStart(3,98,false);
+}
+
+
+
+function timer(e){
+var rot = e.npc.getRotation();
+var pit = -(e.npc.getPitch());
+
+if(e.id ==1){
+for (var a = -9;a<9;a+=1){
+for (var b = 0;b<36;b+=1){
+var d = Circles(e.npc.getRotation()+a*10,e.npc.getPitch()+b*10,2.2);
+e.API.executeCommand(e.npc.getWorld(),"particle dust 1 0 1 1.5 "+Number(e.npc.x+d[0])+" "+Number(e.npc.y+1+d[1])+" "+Number(e.npc.z+d[2])+" 0 0 0 0 1 force");
+var entt = e.npc.world.getNearbyEntities(e.npc.x+d[0],e.npc.y+1+d[1],e.npc.z+d[2],1,5);
+for(var j=0;j<entt.length;j++){
+ if(entt[j].UUID == e.npc.UUID){
+continue;
+}
+ if(entt[j].getName() == "Satoru Gojo" || entt[j].getName() == "GOJO" ){
+continue;
+}
+entt[j].damage(100);
+
+}}}
+
+}
+
+if(e.id == 2){
+e.npc.despawn()
+}
+
+if(e.id ==3){
+e.npc.timers.stop(1);
+}
+
+}
+
+
+
+function Vectors(angle,pitch,distance){
+var dx = -Math.sin(angle)*(distance*Math.cos(pitch));
+var dy = Math.sin(pitch)*distance;
+var dz = Math.cos(angle)*(distance*Math.cos(pitch));
+return [dx,dy,dz]
+}
+
+
+function Circles(angle,pitch,distance){
+var a = angle*Math.PI/180;
+var b = pitch*Math.PI/180;
+var dx = -Math.sin(a)*distance*Math.cos(b);
+var dy = Math.sin(b)*distance
+var dz = Math.cos(a)*distance*Math.cos(b);
+return [dx,dy,dz];
+}
