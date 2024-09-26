@@ -1,0 +1,250 @@
+var r1 = Math.floor(Math.random() * 20) + 60;
+var r2 = Math.floor(Math.random() * 200) + 100;
+var domain = 0;
+
+function init(e){
+domain = 0;
+}
+
+function damaged(e){
+//e.npc.timers.forceStart(10,30,false);e
+var r1 = Math.floor(Math.random() * 20) + 10;
+var move = [3,6,8,11];
+var r2 = Math.floor(Math.random() * 3) + 0;
+if(!e.npc.timers.has(2)){
+e.npc.timers.forceStart(13/*move[r2]*/,r1,false);
+
+}
+if(domain == 0 && e.npc.getHealth() < e.npc.getMaxHealth/4){
+e.npc.timers.forceStart(13,20,false);
+domain++;
+}
+}
+
+function init(e){
+hit = 0;
+}
+
+var hit = 0;
+function meleeAttack(e){
+if(hit == 0){
+e.npc.swingMainhand();
+hit = 1;
+}
+else{
+e.npc.swingOffhand
+hit = 0;
+}
+}
+
+
+function timer(e){
+var handL = e.npc.getJob().getPart(1);
+var handR = e.npc.getJob().getPart(2);
+var body = e.npc.getJob().getPart(3);
+var legL = e.npc.getJob().getPart(4);
+var legR = e.npc.getJob().getPart(5);
+var head = e.npc.getJob().getPart(0);
+var handLq = e.npc.getJob().getPart(7);
+var handRq = e.npc.getJob().getPart(8);
+var bodyq = e.npc.getJob().getPart(9);
+var legLq = e.npc.getJob().getPart(10);
+var legRq = e.npc.getJob().getPart(11);
+var headq = e.npc.getJob().getPart(6);
+var rot = e.npc.getRotation();
+var pit = -(e.npc.getPitch())
+
+if(e.id ==1){
+e.npc.ai.setWalkingSpeed(6);
+e.npc.stats.melee.setRange(3);
+e.npc.stats.melee.setDelay(17);
+body.setRotation(180,180,180);
+head.setRotation(180,180,180);
+handL.setRotation(180,180,180);
+handR.setRotation(180,180,180);
+legL.setRotation(180,180,180);
+legR.setRotation(180,180,180);
+bodyq.setRotation(180,180,180);
+headq.setRotation(180,180,180);
+handLq.setRotation(180,180,180);
+handRq.setRotation(180,180,180);
+legLq.setRotation(180,180,180);
+legRq.setRotation(180,180,180);
+e.npc.updateClient();
+}
+
+if(e.id == 2){
+
+}
+
+if(e.id == 3){
+if(!e.npc.timers.has(2)){
+e.npc.ai.setWalkingSpeed(0);
+e.npc.stats.melee.setRange(1);
+handL.setRotation(110,180,180);
+e.npc.updateClient();
+e.npc.say("Cursed Technique: Reversal Red");
+e.npc.timers.forceStart(4,20,false);
+e.npc.timers.forceStart(1,35,false);
+e.npc.timers.forceStart(2,200,false);
+}
+}
+
+if(e.id == 4){
+var v = Vectors(rot*Math.PI/180,pit*Math.PI/180,1);
+e.API.clones.spawn(e.npc.x+v[0],e.npc.y+.5,e.npc.z+v[2],1,"Red",e.npc.world);
+e.npc.timers.forceStart(5,15,false);
+}
+
+if(e.id == 5){
+var V = Vectors(rot*Math.PI/180,pit*Math.PI/180,5);
+var entt = e.npc.world.getNearbyEntities(e.npc.x,e.npc.y,e.npc.z,20,2);
+for (var i = 0; i<entt.length; i++){
+if(entt[i].getName()== "Red"){
+entt[i].setMotionX(V[0])
+entt[i].setMotionZ(V[2]);
+entt[i].setMotionY(0.12);
+}}
+}
+
+if(e.id == 6){
+if(!e.npc.timers.has(2)){
+e.npc.ai.setWalkingSpeed(0);
+e.npc.stats.melee.setRange(1);
+handR.setRotation(110,180,180);
+e.npc.updateClient();
+e.npc.say("Cursed Technique: Lapse Blue");
+e.npc.timers.forceStart(7,20,false);
+e.npc.timers.forceStart(1,35,false);
+e.npc.timers.forceStart(2,200,false);
+}
+}
+
+if(e.id == 7){
+var v = Vectors(rot*Math.PI/180,pit*Math.PI/180,4);
+e.API.clones.spawn(e.npc.x+v[0],e.npc.y+.5,e.npc.z+v[2],1,"Blue",e.npc.world);
+}
+
+if(e.id == 8){
+if(!e.npc.timers.has(2)){
+e.npc.ai.setWalkingSpeed(0);
+e.npc.stats.melee.setRange(1);
+handR.setRotation(110,140,180);
+handL.setRotation(110,220,180);
+e.npc.updateClient();
+e.npc.say("Cursed Technique: Hollow Purple");
+e.npc.timers.forceStart(9,33,false);
+e.npc.timers.forceStart(1,65,false);
+//e.npc.timers.forceStart(2,265,false);
+}
+}
+
+if(e.id == 9){e
+var v = Vectors(rot*Math.PI/180,pit*Math.PI/180,2);
+e.API.clones.spawn(e.npc.x+v[0],e.npc.y+.5,e.npc.z+v[2],1,"Purple",e.npc.world);
+e.npc.timers.forceStart(10,25,false);
+}
+
+if(e.id == 10){
+var V = Vectors(rot*Math.PI/180,pit*Math.PI/180,3);
+var entt = e.npc.world.getNearbyEntities(e.npc.x,e.npc.y,e.npc.z,20,2);
+for (var i = 0; i<entt.length; i++){
+if(entt[i].getName()== "Purple"){
+entt[i].setMotionX(V[0])
+entt[i].setMotionZ(V[2]);
+entt[i].setMotionY(0.12);
+}}
+}
+
+if(e.id == 11){
+if(!e.npc.timers.has(2)){
+e.npc.say("Yowai Mo!");
+e.npc.addPotionEffect(24,5,1,false);
+immune(e.npc,true);
+e.npc.timers.forceStart(12,100,false);
+e.npc.timers.forceStart(2,120,false);
+}
+}
+
+if(e.id == 12){
+immune(e.npc,false);
+}
+
+if(e.id == 13){
+e.npc.ai.setWalkingSpeed(0);
+e.npc.stats.melee.setRange(1);
+handR.setRotation(100,160,180);
+e.npc.updateClient();
+e.npc.say("Domain Expansion: Unlimited Void");
+e.npc.timers.forceStart(1,40,false);
+e.npc.timers.forceStart(14,50,false);
+e.npc.timers.forceStart(16,300,false);
+for (var a = -9;a<9;a+=0.5){
+for (var b = 0;b<36;b+=0.5){
+var d = Circles(e.npc.getRotation()+a*10,e.npc.getPitch()+b*10,10);
+e.API.executeCommand(e.npc.getWorld(),"particle dust 1 1 1 2 "+Number(e.npc.x+d[0])+" "+Number(e.npc.y+1+d[1])+" "+Number(e.npc.z+d[2])+" 0 0 0 0 1 force");
+}}
+}
+
+if(e.id == 14){
+e.npc.timers.forceStart(15,2,true);
+e.API.clones.spawn(e.npc.x,e.npc.y+0.5,e.npc.z,1,"UV",e.npc.world);
+}
+
+if(e.id == 15){
+e.npc.timers.forceStart(15,2,true);
+for (var a = -9;a<9;a+=1){
+for (var b = 0;b<36;b+=1){
+var d = Circles(e.npc.getRotation()+a*10,e.npc.getPitch()+b*10,10);
+e.API.executeCommand(e.npc.getWorld(),"particle dust 0 0 0 3 "+Number(e.npc.x+d[0])+" "+Number(e.npc.y+1+d[1])+" "+Number(e.npc.z+d[2])+" 0 0 0 0 1 force");
+var entt = e.npc.world.getNearbyEntities(e.npc.x+d[0],e.npc.y+1+d[1],e.npc.z+d[2],1,5);
+for(var j=0;j<entt.length;j++){
+ if(entt[j].UUID == e.npc.UUID){
+continue;
+}
+ if(entt[j].getName() == "Satoru Gojo" || entt[j].getName() == "GOJO" ){
+continue;
+}
+entt[j].addPotionEffect(4,3,100,false);
+entt[j].addPotionEffect(18,3,100,false);
+entt[j].addPotionEffect(2,3,100,false);
+entt[j].addPotionEffect(15,3,10,false);
+}}}
+
+}
+
+if(e.id == 16){
+e.npc.timers.stop(15);
+}
+
+}
+
+function projectileImpact(e){
+e.npc.setPosition(e.projectile.x,e.projectile.y,e.projectile.z);
+}
+
+function died(e){
+e.API.executeCommand(e.player.getWorld(),"xp add @a[distance=10] 500 levels");
+}
+
+function Vectors(angle,pitch,distance){
+var dx = -Math.sin(angle)*(distance*Math.cos(pitch));
+var dy = Math.sin(pitch)*distance;
+var dz = Math.cos(angle)*(distance*Math.cos(pitch));
+return [dx,dy,dz]
+}
+
+
+function Circles(angle,pitch,distance){
+var a = angle*Math.PI/180;
+var b = pitch*Math.PI/180;
+var dx = -Math.sin(a)*distance*Math.cos(b);
+var dy = Math.sin(b)*distance
+var dz = Math.cos(a)*distance*Math.cos(b);
+return [dx,dy,dz];
+}
+
+
+function immune(t, boolean) {
+    t.player.getMCEntity().field_71075_bZ.field_75102_a = boolean
+}
