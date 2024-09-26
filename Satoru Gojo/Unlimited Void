@@ -1,0 +1,25 @@
+function init(e){
+e.npc.timers.forceStart(1,300,false);
+}
+
+function tick(e){
+var entt = e.npc.world.getNearbyEntities(e.npc.x,e.npc.y,e.npc.z,30,2);
+for(var j=0;j<entt.length;j++){
+ if(entt[j].UUID == e.npc.UUID){
+continue;
+}
+ if(entt[j].getName() == "GOJO"){
+if(entt[j].pos.distanceTo(e.npc.pos)>6){
+entt[j].setPosition(e.npc.x,e.npc.y,e.npc.z);
+}
+}
+}
+
+}
+
+function timer(e){
+if(e.id ==1){
+e.npc.despawn();
+}
+
+}
