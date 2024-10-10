@@ -1,0 +1,241 @@
+var r1 = Math.floor(Math.random() * 20) + 60;
+var r2 = Math.floor(Math.random() * 200) + 100;
+var r = 0;
+
+function damaged(e){
+//e.npc.timers.forceStart(10,30,false);
+var r1 = Math.floor(Math.random() * 20) + 10;
+var move = [3,6,7,11,13];
+var r2 = Math.floor(Math.random() *5) + 0;
+if(!e.npc.timers.has(2)){
+e.npc.timers.forceStart(move[r2],r1,false);
+}
+}
+
+function meleeAttack(e){
+/*var handL = e.npc.getJob().getPart(1);
+for (var i = 180;i>110;i-=10){
+handL.setRotation(i,180,180);
+e.npc.updateClient();
+}
+e.npc.timers.forceStart(1,7,false);
+e.npc.updateClient();*/
+}
+
+function timer(e){
+var handL = e.npc.getJob().getPart(1);
+var handR = e.npc.getJob().getPart(2);
+var body = e.npc.getJob().getPart(3);
+var legL = e.npc.getJob().getPart(4);
+var legR = e.npc.getJob().getPart(5);
+var head = e.npc.getJob().getPart(0);
+var handLq = e.npc.getJob().getPart(7);
+var handRq = e.npc.getJob().getPart(8);
+var bodyq = e.npc.getJob().getPart(9);
+var legLq = e.npc.getJob().getPart(10);
+var legRq = e.npc.getJob().getPart(11);
+var headq = e.npc.getJob().getPart(6);
+var rot = e.npc.getRotation();
+var pit = -(e.npc.getPitch())
+
+if(e.id ==1){
+e.npc.ai.setWalkingSpeed(7);
+e.npc.stats.melee.setRange(3);
+e.npc.stats.melee.setDelay(17);
+body.setRotation(180,180,180);
+head.setRotation(180,180,180);
+handL.setRotation(180,180,180);
+handR.setRotation(180,180,180);
+legL.setRotation(180,180,180);
+legR.setRotation(180,180,180);
+bodyq.setRotation(180,180,180);
+headq.setRotation(180,180,180);
+handLq.setRotation(180,180,180);
+handRq.setRotation(180,180,180);
+legLq.setRotation(180,180,180);
+legRq.setRotation(180,180,180);
+e.npc.updateClient();
+}
+
+if(e.id == 2){
+
+}
+
+if(e.id == 3){
+if(!e.npc.timers.has(2)){
+e.npc.say("Jin Mori Original: Triple Kick");
+e.npc.ai.setWalkingSpeed(0);
+legL.setRotation(80,120,180);
+handL.setRotation(80,180,180);
+head.setRotation(200,180,180);
+e.npc.timers.forceStart(2,100,false);
+e.npc.timers.forceStart(4,15,false);
+for (var a = 0;a<5;a+=1){
+for (var b = 0;b<36;b+=1){
+var d = Circles(e.npc.getRotation()+b*10,e.npc.getPitch(),a);
+e.API.executeCommand(e.npc.getWorld(),"particle dust 1 1 1 3 "+Number(e.npc.x+d[0])+" "+Number(e.npc.y+d[1])+" "+Number(e.npc.z+d[2])+" 0 0 0 0 1 force");
+}}
+e.npc.updateClient();
+}
+}
+
+if(e.id == 4){
+e.npc.timers.forceStart(5,1,true);
+
+}
+
+if(e.id == 5){
+r+=40;
+e.npc.getMCEntity().m_5616_(r);
+for (var a = 0;a<5;a+=1){
+for (var b = 0;b<36;b+=1){
+var d = Circles(e.npc.getRotation()+b*10,e.npc.getPitch(),a);
+e.npc.world.spawnParticle("cloud",e.npc.x+d[0],e.npc.y+1,e.npc.z+d[2],0,0,0,0,1);
+var entt = e.npc.world.getNearbyEntities(e.npc.x+d[0],e.npc.y+1+d[1],e.npc.z+d[2],1,5);
+for(var j=0;j<entt.length;j++){
+ if(entt[j].UUID == e.npc.UUID){
+continue;
+}
+entt[j].damage(150);
+}}}
+if(r>1180){
+e.npc.timers.stop(5);
+e.npc.timers.forceStart(1,40,false);
+r=0;
+}
+}
+
+if(e.id == 6){
+e.npc.timers.forceStart(2,40,false);
+for (var a = -9;a<9;a+= 1){
+for (var b = 0;b<36;b+= 1){
+var v = Circles(e.npc.getRotation()+a*10,e.npc.getPitch()+b*10,2);
+e.API.executeCommand(e.npc.getWorld(),"particle dust 1 1 1 3 "+Number(e.npc.x+v[0])+" "+Number(e.npc.y+1+v[1])+" "+Number(e.npc.z+v[2])+" 1 0.5 1 15 1 force");
+
+}}
+e.API.clones.spawn(e.npc.x+1,e.npc.y+.5,e.npc.z,1,"Jin Mori Clone",e.npc.world);
+e.API.clones.spawn(e.npc.x-2,e.npc.y+.5,e.npc.z,1,"Jin Mori Clone",e.npc.world);
+}
+
+if(e.id == 7){
+if(!e.npc.timers.has(2)){
+e.npc.say("Reneal Taekwondo: Taebaek");
+e.npc.ai.setWalkingSpeed(0);
+e.npc.timers.forceStart(2,100,false);
+e.npc.timers.forceStart(8,15,false);
+e.npc.updateClient();
+}
+}
+
+if(e.id == 8){
+var v = Vectors(rot*Math.PI/180,pit*Math.PI/180,2.5);
+legL.setRotation(80,180,180);
+e.npc.timers.forceStart(1,20,false);
+e.npc.timers.forceStart(9,0,true);
+e.npc.setMotionX(v[0]);
+e.npc.setMotionY(0.2);
+e.npc.setMotionZ(v[2]);
+e.npc.updateClient();
+}
+
+if(e.id == 9){
+var d = Circles(e.npc.getRotation(),e.npc.getPitch(),0.5);
+e.npc.world.spawnParticle("cloud",e.npc.x+d[0],e.npc.y+1,e.npc.z+d[2],0,0,0,0,90);
+var entt = e.npc.world.getNearbyEntities(e.npc.x+d[0],e.npc.y+d[1],e.npc.z+d[2],1,5);
+for(var j=0;j<entt.length;j++){
+ if(entt[j].UUID == e.npc.UUID){
+continue;
+}
+entt[j].damage(300);
+}
+}
+
+if(e.id == 10){
+e.npc.timers.stop(9);
+}
+
+if(e.id == 11){
+if(!e.npc.timers.has(2)){
+e.npc.say("Nyoibo Extend!");
+e.npc.stats.melee.setStrength(320);
+e.npc.stats.melee.setRange(6);
+e.API.executeCommand(e.npc.getWorld(),"scale set pehkui:held_item 2 @e[name=\""+e.npc.getName()+"\"]");
+
+e.npc.updateClient();
+e.npc.timers.forceStart(12,160,false);
+e.npc.timers.forceStart(2,100,false);
+}
+}
+
+if(e.id == 12){
+e.npc.stats.melee.setStrength(250);
+e.npc.stats.melee.setRange(3);
+e.API.executeCommand(e.npc.getWorld(),"scale set pehkui:held_item 1 @e[name=\""+e.npc.getName()+"\"]");
+e.npc.updateClient();
+}
+
+if(e.id == 13){
+if(!e.npc.timers.has(2)){
+e.npc.say("Imagine a Perfect Circle...");
+ var x = e.npc.x;
+var y = e.npc.y;
+var z = e.npc.z;
+var d = Vectors(rot*Math.PI/180,pit*Math.PI/180,2);
+for(var i = 0;i<=30;i+=0.5){
+for(var k = -5;k<=5;k+=0.5){
+e.npc.world.spawnParticle("end_rod",(d[0]*i)+x+k,(d[1]*i)+y,(d[2]*i)+z+k,0,4,0,0,4);
+}}
+e.npc.ai.setWalkingSpeed(0);
+e.npc.inventory.setLeftHand(e.npc.world.createItem("minecraft:air",1))
+handL.setRotation(72,180,180);
+legL.setRotation(150,180,180);
+legR.setRotation(230,180,180);
+e.npc.updateClient();
+e.npc.timers.forceStart(14,50,false);
+e.npc.timers.forceStart(2,300,false);
+}
+}
+
+if(e.id == 14){
+ var x = e.npc.x;
+var y = e.npc.y;
+var z = e.npc.z;
+handL.setRotation(210,180,180);
+legL.setRotation(190,180,180);
+legR.setRotation(100,180,180);
+e.npc.updateClient();
+e.npc.say("Mori Jin Original: Extreme Version - Jin Heachook");
+var d = Vectors(rot*Math.PI/180,pit*Math.PI/180,2);
+for(var i = 0;i<=30;i+=0.5){
+for(var k = -5;k<=5;k+=0.5){
+e.npc.world.spawnParticle("cloud",(d[0]*i)+x+k,(d[1]*i)+y,(d[2]*i)+z+k,0,4,0,0,4);
+var ent = e.npc.world.getNearbyEntities((d[0]*i)+x+k,(d[1]*i)+y,(d[2]*i)+z+k,4,5);
+for(var j=0;j<ent.length;j++){
+ if(ent[j].UUID == e.npc.UUID){
+continue;
+}
+ent[j].damage(500);
+}}}
+e.npc.timers.forceStart(1,20,false);
+e.npc.inventory.setLeftHand(e.npc.world.createItem("minecraft:iron_sword",1))
+}
+
+}
+
+
+
+function Vectors(angle,pitch,distance){
+var dx = -Math.sin(angle)*(distance*Math.cos(pitch));
+var dy = Math.sin(pitch)*distance;
+var dz = Math.cos(angle)*(distance*Math.cos(pitch));
+return [dx,dy,dz]
+}
+
+function Circles(angle,pitch,distance){
+var a = angle*Math.PI/180;
+var b = pitch*Math.PI/180;
+var dx = -Math.sin(a)*distance*Math.cos(b);
+var dy = Math.sin(b)*distance
+var dz = Math.cos(a)*distance*Math.cos(b);
+return [dx,dy,dz];
+}
