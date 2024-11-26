@@ -1,0 +1,197 @@
+var r1 = Math.floor(Math.random() * 20) + 60;
+var r2 = Math.floor(Math.random() * 200) + 100;
+var r = 0;
+function died(e){
+e.API.executeCommand(e.npc.getWorld(),"xp add Ninir 333333");
+}
+function damaged(e){
+//e.npc.timers.forceStart(10,30,false);
+var d = Vectors((e.npc.getRotation())*Math.PI/180,((-e.npc.getPitch())*Math.PI/180),1);
+var r1 = Math.floor(Math.random() * 20) + 10;
+var move = [3,5,7,11,13];
+var r2 = Math.floor(Math.random() *3) + 0;
+if(!e.npc.timers.has(2)){
+e.npc.timers.forceStart(move[r2],r1,false);
+}
+}
+
+function meleeAttack(e){
+
+}
+
+function timer(e){
+var handL = e.npc.getJob().getPart(1);
+var handR = e.npc.getJob().getPart(2);
+var body = e.npc.getJob().getPart(3);
+var legL = e.npc.getJob().getPart(4);
+var legR = e.npc.getJob().getPart(5);
+var head = e.npc.getJob().getPart(0);
+var handLq = e.npc.getJob().getPart(7);
+var handRq = e.npc.getJob().getPart(8);
+var bodyq = e.npc.getJob().getPart(9);
+var legLq = e.npc.getJob().getPart(10);
+var legRq = e.npc.getJob().getPart(11);
+var headq = e.npc.getJob().getPart(6);
+var rot = e.npc.getRotation();
+var pit = -(e.npc.getPitch())
+
+if(e.id ==1){
+e.npc.ai.setWalkingSpeed(7);
+e.npc.stats.melee.setRange(3);
+e.npc.stats.melee.setDelay(17);
+e.npc.ai.setStandingType(0);
+body.setRotation(180,180,180);
+head.setRotation(180,180,180);
+handL.setRotation(180,180,180);
+handR.setRotation(180,180,180);
+legL.setRotation(180,180,180);
+legR.setRotation(180,180,180);
+bodyq.setRotation(180,180,180);
+headq.setRotation(180,180,180);
+handLq.setRotation(180,180,180);
+handRq.setRotation(180,180,180);
+legLq.setRotation(180,180,180);
+legRq.setRotation(180,180,180);
+e.npc.updateClient();
+}
+
+if(e.id == 2){
+
+}
+
+if(e.id == 3){
+if(!e.npc.timers.has(2)){
+e.npc.ai.setWalkingSpeed(0);
+e.npc.stats.melee.setRange(1);
+handL.setRotation(110,180,180);
+e.npc.updateClient();
+var v = Vectors(rot*Math.PI/180,pit*Math.PI/180,1);
+e.API.clones.spawn(e.npc.x+v[0],e.npc.y+.5,e.npc.z+v[2],1,"Fireball2",e.npc.world);
+e.npc.timers.forceStart(4,15,false);
+e.npc.timers.forceStart(2,60,false);
+e.npc.timers.forceStart(1,20,false);
+}
+}
+
+if(e.id == 4){
+var V = Vectors(rot*Math.PI/180,pit*Math.PI/180,1.7);
+var entt = e.npc.world.getNearbyEntities(e.npc.x,e.npc.y,e.npc.z,20,5);
+for (var i = 0; i<entt.length; i++){
+if(entt[i].getName()== "Fireball2"){
+entt[i].setMotionX(V[0])
+entt[i].setMotionZ(V[2]);
+entt[i].setMotionY(0.12);
+}}
+}
+
+if(e.id == 5){
+handL.setRotation(70,180,180);
+e.npc.updateClient();
+if(!e.npc.timers.has(2)){
+// 1 = no rotation; 0 = body
+e.npc.setRotation(rot);
+e.npc.ai.setStandingType(1);
+for (var b = 0;b<36;b+=1){
+var d = Vectors(rot*Math.PI/180,pit*Math.PI/180,6);
+var v = Circles(e.npc.getRotation()+b*10,e.npc.getPitch(),2);
+e.API.executeCommand(e.npc.getWorld(),"particle dust 1 1 1 2 "+Number(e.npc.x+d[0]+v[0])+" "+Number(e.npc.y)+" "+Number(e.npc.z+d[2]+v[2])+" 0 8 0 0 20 force");
+}}
+e.npc.timers.forceStart(6,20,false);
+e.npc.timers.forceStart(2,80,false);
+}
+
+if(e.id == 6){
+e.npc.world.playSoundAt(e.npc.getPos(),"irons_spellbooks:loop.fire_breath",1,1);
+for (var a = 0;a<8;a+=1){
+for (var b = 0;b<36;b+=0.5){
+var d = Vectors(rot*Math.PI/180,pit*Math.PI/180,6);
+var v = Circles(e.npc.getRotation()+b*10,e.npc.getPitch(),2);
+e.API.executeCommand(e.npc.getWorld(),"particle dust 0.8 0.3 0.3 2 "+Number(e.npc.x+d[0]+v[0])+" "+Number(e.npc.y)+" "+Number(e.npc.z+d[2]+v[2])+" 0 8 0 0 20 force");
+var entt = e.npc.world.getNearbyEntities(e.npc.x+d[0]+v[0],e.npc.y+a,e.npc.z+d[2]+v[0],1,5);
+for(var j=0;j<entt.length;j++){
+ if(entt[j].UUID == e.npc.UUID){
+continue;
+}
+entt[j].damage(20);
+}}}
+e.npc.timers.forceStart(1,60,false);
+}
+
+if(e.id == 7){
+if(!e.npc.timers.has(2)){
+handR.setRotation(70,180,180);
+e.npc.updateClient();
+e.npc.setMotionY(1.3);
+e.npc.timers.forceStart(8,20,false);
+e.npc.timers.forceStart(2,70,false);
+e.npc.setRotation(rot);
+e.npc.ai.setStandingType(1);
+}
+}
+
+if(e.id == 8){
+e.npc.world.playSoundAt(e.npc.getPos(),"irons_spellbooks:cast.generic.lightning",1,1);
+handR.setRotation(170,180,300);
+e.npc.updateClient();
+for (var a = 0;a<5;a+=1){
+for (var b = 0;b<18;b+=1){
+//var d = Vectors(rot*Math.PI/180,pit*Math.PI/180,6);
+var v = Circles((e.npc.getRotation()-90)+b*10,e.npc.getPitch(),5);
+e.API.executeCommand(e.npc.getWorld(),"particle irons_spellbooks:electricity "+Number(e.npc.x+v[0])+" "+Number(e.npc.y)+" "+Number(e.npc.z+v[2])+" 0 4 0 0 50 force");
+var entt = e.npc.world.getNearbyEntities(e.npc.x+v[0],e.npc.y-a,e.npc.z+v[2],1,5);
+for(var j=0;j<entt.length;j++){
+ if(entt[j].UUID == e.npc.UUID){
+continue;
+}
+entt[j].damage(20);
+}}}
+e.npc.timers.forceStart(1,50,false);
+}
+
+if(e.id == 9){
+
+}
+
+if(e.id == 10){
+
+}
+
+if(e.id == 11){
+if(!e.npc.timers.has(2)){
+
+}
+}
+
+if(e.id == 12){
+
+}
+
+if(e.id == 13){
+if(!e.npc.timers.has(2)){
+
+}
+}
+
+if(e.id == 14){
+
+}
+
+}
+
+
+
+function Vectors(angle,pitch,distance){
+var dx = -Math.sin(angle)*(distance*Math.cos(pitch));
+var dy = Math.sin(pitch)*distance;
+var dz = Math.cos(angle)*(distance*Math.cos(pitch));
+return [dx,dy,dz]
+}
+
+function Circles(angle,pitch,distance){
+var a = angle*Math.PI/180;
+var b = pitch*Math.PI/180;
+var dx = -Math.sin(a)*distance*Math.cos(b);
+var dy = Math.sin(b)*distance
+var dz = Math.cos(a)*distance*Math.cos(b);
+return [dx,dy,dz];
+}
