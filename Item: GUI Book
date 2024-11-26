@@ -1,0 +1,49 @@
+var GUI1;
+
+function init(e){
+e.item.setTexture("minecraft:enchanted_book");
+e.item.setDurabilityShow(false);
+e.item.setCustomName("§bMAGIC");
+}
+function interact(e){
+GUI1 = e.API.createCustomGui(420, 250,250, true,e.player);
+GUI1.setBackgroundTexture("minecraft:textures/gui/demo_background.png");
+GUI1.addButton(1, "1",10 ,10, 20,20);
+GUI1.addButton(2, "2",30 ,10, 20,20);
+GUI1.addButton(3, "3",50 ,10, 20,20);
+GUI1.getComponent(1).setHoverText("Night Vision");
+GUI1.getComponent(2).setHoverText("Dark Blast");
+GUI1.getComponent(3).setHoverText("Dark Pulse");
+e.player.showCustomGui(GUI1);
+}
+
+function customGuiButton(e){
+var btn = e.buttonId;
+var nbt = e.player.getEntityNbt();
+var mana = nbt.getCompound("ForgeCaps").getCompound("solo_leveling:player_variables").getDouble("mana");
+
+if(btn == 1){
+if(mana>3){
+e.player.addPotionEffect(16,180,1,false);
+e.player.message("§eNIGHT VISION");
+nbt.getCompound("ForgeCaps").getCompound("solo_leveling:player_variables").setDouble("mana",mana-5);
+e.player.setEntityNbt(nbt);
+}else{e.player.message("NOT ENOUGH MANA");}}
+
+if(btn == 2){
+if(mana>9){
+e.player.timers.forceStart(2,5,false);
+e.player.message("§cDark Blast");
+nbt.getCompound("ForgeCaps").getCompound("solo_leveling:player_variables").setDouble("mana",mana-9);
+e.player.setEntityNbt(nbt);
+}else{e.player.message("NOT ENOUGH MANA");}}
+
+if(btn == 3){
+if(mana>14){
+e.player.timers.forceStart(3,2,true);
+e.player.message("§cDark Pulse");
+nbt.getCompound("ForgeCaps").getCompound("solo_leveling:player_variables").setDouble("mana",mana-14);
+e.player.setEntityNbt(nbt);
+}else{e.player.message("NOT ENOUGH MANA");}}
+}
+
