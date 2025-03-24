@@ -1,0 +1,348 @@
+function Shoot(e,name,speed){
+var V = Vectors(e.getRotation()*Math.PI/180,e.getPitch()*Math.PI/180,speed);
+var entt = e.world.getNearbyEntities(e.x,e.y,e.z,15,7);
+for (var i = 0; i<entt.length; i++){
+if(entt[i].getName()== name){
+entt[i].setMotionX(V[0])
+entt[i].setMotionZ(V[2]);
+entt[i].setMotionY(0.12);
+}}
+}
+var pop = 0;
+
+function damaged(e){
+var r1 = Math.floor(Math.random() * 60) + 0;
+var move = [3,4];
+var r2 = Math.floor(Math.random() * 3) + 0;
+if(pop == 0 && e.npc.getHealth()<400){
+pop++;
+e.npc.timers.forceStart(7,20,false);
+}
+if(!e.npc.timers.has(2)){
+e.npc.timers.forceStart(3,r1,false);
+}
+}
+
+function init(e){
+hit = 0;
+pop = 0;
+}
+
+var hit = 0;
+function meleeAttack(e){
+var handL = e.npc.getJob().getPart(1);
+var handR = e.npc.getJob().getPart(2);
+var body = e.npc.getJob().getPart(3);
+var legL = e.npc.getJob().getPart(4);
+var legR = e.npc.getJob().getPart(5);
+var head = e.npc.getJob().getPart(0);
+var handLq = e.npc.getJob().getPart(7);
+var handRq = e.npc.getJob().getPart(8);
+var bodyq = e.npc.getJob().getPart(9);
+var legLq = e.npc.getJob().getPart(10);
+var legRq = e.npc.getJob().getPart(11);
+var headq = e.npc.getJob().getPart(6);
+var rot = e.npc.getRotation();
+var pit = -(e.npc.getPitch())
+if (hit == 0){
+handL.setRotation(90,180,180);
+body.setRotation(180,210,180);
+e.npc.updateClient();
+e.npc.timers.forceStart(1,10,false);
+hit++;
+}
+else if(hit == 1){
+handR.setRotation(90,180,180);
+handL.setRotation(180,180,180);
+body.setRotation(180,150,180);
+e.npc.timers.forceStart(1,15,false);
+hit++;
+e.npc.updateClient();
+}
+else if(hit == 2){
+handR.setRotation(40,160,180);
+handL.setRotation(40,200,180);
+body.setRotation(180,180,180);
+e.npc.timers.forceStart(1,15,false);
+e.npc.timers.forceStart(5,21,false);
+hit++;
+e.npc.updateClient();
+e.npc.getAttackTarget().getMotionY();
+e.npc.getAttackTarget().knockback(1,rot);
+e.npc.getAttackTarget().setMotionY(3);
+}
+else if(hit == 3){
+e.npc.say("Cleave");
+e.projectile.world.playSoundAt(e.projectile.getPos(),"epicfight:entity.hit.blade",5,1);
+handR.setRotation(90,190,180);
+handL.setRotation(90,170,180);
+body.setRotation(180,180,180);
+e.npc.timers.forceStart(1,15,false);
+var x = e.npc.x;
+var y = e.npc.y;
+var z = e.npc.z;
+for (var b = 0;b<18;b+=1){
+var v = Circles((e.npc.getRotation())-90+b*10,e.npc.getPitch(),1);
+e.API.executeCommand(e.npc.getWorld(),"particle dust 0 0 0 1 "+Number(e.npc.x+v[0])+" "+Number(e.npc.y+1)+" "+Number(e.npc.z+v[2])+" 0 0 0 0 2 force");
+e.API.executeCommand(e.npc.getWorld(),"particle dust 0 0 0 1 "+Number(e.npc.x+v[0])+" "+Number(e.npc.y+0.5)+" "+Number(e.npc.z+v[2])+" 0 0 0 0 2 force");
+var entt = e.npc.world.getNearbyEntities(e.npc.x+v[0],e.npc.y+1,e.npc.z+v[2],1,5);
+for(var j=0;j<entt.length;j++){
+ if(entt[j].UUID == e.npc.UUID){
+continue;
+}
+entt[j].damage(8);
+e.npc.getAttackTarget().setMotionY(-2);
+}}
+hit=0;
+e.npc.updateClient();
+}
+}
+
+
+function timer(e){
+var handL = e.npc.getJob().getPart(1);
+var handR = e.npc.getJob().getPart(2);
+var body = e.npc.getJob().getPart(3);
+var legL = e.npc.getJob().getPart(4);
+var legR = e.npc.getJob().getPart(5);
+var head = e.npc.getJob().getPart(0);
+var handLq = e.npc.getJob().getPart(7);
+var handRq = e.npc.getJob().getPart(8);
+var bodyq = e.npc.getJob().getPart(9);
+var legLq = e.npc.getJob().getPart(10);
+var legRq = e.npc.getJob().getPart(11);
+var headq = e.npc.getJob().getPart(6);
+var rot = e.npc.getRotation();
+var pit = -(e.npc.getPitch())
+
+if(e.id ==1){
+e.npc.ai.setWalkingSpeed(6);
+e.npc.stats.melee.setRange(2);
+e.npc.stats.melee.setDelay(20);
+body.setRotation(180,180,180);
+head.setRotation(180,180,180);
+handL.setRotation(180,180,180);
+handR.setRotation(180,180,180);
+legL.setRotation(180,180,180);
+legR.setRotation(180,180,180);
+bodyq.setRotation(180,180,180);
+headq.setRotation(180,180,180);
+handLq.setRotation(180,180,180);
+handRq.setRotation(180,180,180);
+legLq.setRotation(180,180,180);
+legRq.setRotation(180,180,180);
+e.npc.ai.setStandingType(0);
+e.npc.updateClient();
+}
+
+if(e.id == 2){
+
+}
+
+if(e.id == 3){
+// Dismantle - Ranged
+if(!e.npc.timers.has(2)){
+e.npc.say("Dismantle");
+var x = e.npc.x;
+var y = e.npc.y;
+var z = e.npc.z;
+e.npc.ai.setWalkingSpeed(0);
+e.npc.setRotation(rot);
+e.npc.ai.setStandingType(1);
+var d = Vectors(rot*Math.PI/180,pit*Math.PI/180,2);
+handR.setRotation(100,180,180);
+for(var i = 0;i<20;i+=0.5){
+e.API.executeCommand(e.npc.getWorld(),"particle dust 1 1 1 1.5 "+Number(d[0]*i+x)+" "+Number(d[1]*i+y+1)+" "+Number(d[2]*i+z)+"  0 0 0 1 force");
+}
+e.npc.timers.forceStart(4,18,false);
+}
+e.npc.updateClient();
+}
+
+if(e.id == 4){
+var d = Vectors(rot*Math.PI/180,pit*Math.PI/180,2);
+for(var i = 0;i<20;i+=0.5){
+var x = e.npc.x;
+var y = e.npc.y;
+var z = e.npc.z;
+e.npc.world.spawnParticle("sweep_attack",d[0]*i+x,d[1]*i+y+1,d[2]*i+z,0,0,0,0,2);
+var ent = e.npc.world.getNearbyEntities(d[0]*i+x,d[1]*i+y,d[2]*i+z,1,5);
+for(var j=0;j<ent.length;j++){
+if(ent[j].UUID == e.npc.UUID){
+continue;
+ }
+ if(ent[j] != null){
+ent[j].damage(15);
+}
+}}
+e.npc.timers.forceStart(1,23,false);
+e.npc.timers.forceStart(2,63,false);
+e.npc.updateClient();
+}
+
+if(e.id == 5){
+//Cleave - Melee
+try{
+e.npc.setPosition(e.npc.getAttackTarget().x,e.npc.getAttackTarget().y+1,e.npc.getAttackTarget().z);
+}
+catch(ee){}
+}
+
+if(e.id == 6){
+//Fuga - Projectile
+e.npc.say("Fuga");
+var rot = e.npc.getRotation();
+var pit = -(e.npc.getPitch())
+var x = e.npc.x;
+var y = e.npc.y;
+var z = e.npc.z;
+var d = Vectors(rot*Math.PI/180,pit*Math.PI/180,2);
+shootProjectile(e.npc,"minecolonies:firearrow","fuga",100,d[0],1,d[2]);
+Shoot(e.npc,"fuga",1);
+e.npc.timers.forceStart(1,40,false);
+}
+
+if(e.id == 7){
+var rot = e.npc.getRotation();
+var pit = -(e.npc.getPitch())
+var x = e.npc.x;
+var y = e.npc.y;
+var z = e.npc.z;
+var handL = e.npc.getJob().getPart(1);
+var handR = e.npc.getJob().getPart(2);
+handR.setRotation(140,180,150);
+handL.setRotation(140,180,210);
+e.npc.ai.setWalkingSpeed(0);
+e.npc.setRotation(rot);
+e.npc.ai.setStandingType(1);
+e.npc.say("Domain Expansion: Malevolent Shrine");
+e.npc.timers.forceStart(8,80,false);
+for(var i = 0;i<36;i+=0.5){
+var d = Circles(rot+i*10,pit,16);
+e.API.executeCommand(e.npc.getWorld(),"particle dust 1 1 1 2 "+(d[0]+e.npc.x)+" "+(e.npc.y)+" "+(d[2]+e.npc.z) +" 0 0 0 0 1 force");
+}
+for(var i = 0;i<4;i+=1){
+for(var j = -2;j<2;j+=1){
+for(var h = -2;h<2;h+=1){
+for(var g = -4;g>-5;g-=1){
+var d = Vectors(rot*Math.PI/180,pit*Math.PI/180,g);
+e.npc.world.setBlock(x+j+d[0],y+i,z+d[2]+h,"minecraft:red_concrete",1);
+e.npc.updateClient();
+}}}}
+
+
+}
+
+if(e.id == 8){
+//TODO: Domain Slashes
+e.npc.timers.forceStart(9,2,true);
+e.npc.say("ENJOY!");
+}
+
+if(e.id == 9){
+var r1 = Math.floor(Math.random() * 20) + -10;
+var r2 = Math.floor(Math.random() * 7) + 0;
+var r3 = Math.floor(Math.random() * 20) + -10;
+if(slash<70){
+slash++;
+var x = e.npc.x;
+var y = e.npc.y;
+var z = e.npc.z;
+var rot = e.npc.getRotation();
+var pit = -(e.npc.getPitch())
+for(var i = 0;i<36;i+=1){
+for(var j = -9;j<9;j+=1){
+for(var f = 0;f<16;f+=1){
+var d = Circles(rot+i*10,pit,f);
+var dd = Circles(rot+i*10,pit+j*10,f);
+e.npc.world.spawnParticle("sweep_attack",x+r1,y+r2,z+r3,0.05,0.75,0.05,0,1);
+var ent = e.npc.world.getNearbyEntities(dd[0]+x,dd[1]+y,dd[2]+z,1,-1);
+for(var a=0;a<ent.length;a++){
+if(ent[a].getName() == "Ryomen Sukuna"){
+continue;
+}
+ if(ent[a] != null){
+ent[a].damage(20);
+}
+}}}}}
+else{
+var x = e.npc.x;
+var y = e.npc.y;
+var z = e.npc.z;
+var rot = e.npc.getRotation();
+var pit = -(e.npc.getPitch());
+e.npc.timers.stop(9);
+e.npc.timers.forceStart(1,4,false);
+slash = 0;
+for(var i = 0;i<36;i+=0.25){
+for(var j = 0;j<9;j+=1){
+for(var f = 0;f<=16;f+=0.25){
+var dd = Circles(rot+i*10,pit+j*10,f);
+if(e.npc.world.getBlock(dd[0]+x,dd[1]+y,dd[2]+z).getName() == "minecraft:red_concrete"){
+e.npc.world.getBlock(dd[0]+x,dd[1]+y,dd[2]+z).remove();
+}}}}
+e.npc.timers.forceStart(6,40,false)
+}
+}
+
+}
+
+var slash = 0;
+
+function projectileImpact(e){
+var x = e.projectile.x;
+var y = e.projectile.y;
+var z = e.projectile.z;
+var rot = e.projectile.getRotation();
+var pit = -(e.projectile.getPitch())
+for(var i = 0;i<36;i+=0.5){
+var rnd = Math.floor(Math.random() * 6) + 0;
+var d = Circles(rot+i*10,pit,7);
+e.API.executeCommand(e.projectile.getWorld(),"particle dust 1 0.4 0.3 2 "+(d[0]+e.projectile.x)+" "+Number(e.projectile.y)+" "+(d[2]+e.projectile.z)+" "+rnd +" 10 "+ rnd+ " 1.5 100 force");
+var ent = e.projectile.world.getNearbyEntities(d[0]*i+x,d[1]*i+y,d[2]*i+z,1,5);
+for(var j=0;j<ent.length;j++){
+if(ent[j].getName() == "Ryomen Sukuna"){
+continue;
+}
+ if(ent[j] != null){
+ent[j].damage(20);
+}
+}}
+
+}
+
+function shootProjectile(e,projectile,name,dmg,pos1,pos2,pos3){
+var P = e.world.createEntity('customnpcs:customnpcprojectile')
+var item = e.world.createItem(projectile,1);
+item.setCustomName(name);
+P.setName(name);
+var d = Vectors((e.getRotation())*Math.PI/180,((-e.getPitch())*Math.PI/180),10);
+P.setItem(item);
+P.setPosition(e.x+pos1,e.y+pos2,e.z+pos3);
+var n = P.getEntityNbt();
+n.setFloat("damagev2",dmg);
+n.setInteger("size",15);
+n.setBoolean("Render3D", true);
+//n.setFloat(n.getCompound("Rotation")[0],90.0);
+P.setEntityNbt(n);
+e.world.spawnEntity(P);
+P.enableEvents();
+//log(n.toJsonString());
+}
+
+function Vectors(angle,pitch,distance){
+var dx = -Math.sin(angle)*(distance*Math.cos(pitch));
+var dy = Math.sin(pitch)*distance;
+var dz = Math.cos(angle)*(distance*Math.cos(pitch));
+return [dx,dy,dz]
+}
+
+
+function Circles(angle,pitch,distance){
+var a = angle*Math.PI/180;
+var b = pitch*Math.PI/180;
+var dx = -Math.sin(a)*distance*Math.cos(b);
+var dy = Math.sin(b)*distance
+var dz = Math.cos(a)*distance*Math.cos(b);
+return [dx,dy,dz];
+}
