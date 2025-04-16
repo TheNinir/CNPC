@@ -1,0 +1,127 @@
+var spells = ["Air Pressure","SPELL2","SPELL3"];
+var BM = 0;
+
+function timer(e){
+var nbt = e.player.getEntityNbt();
+var mana = nbt.getCompound("ForgeCaps").getCompound("mahoutsukai:mahou").getInteger("MAHOUTSUKAI_PLAYER_STORED_MANA");
+var maxMana = nbt.getCompound("ForgeCaps").getCompound("mahoutsukai:mahou").getInteger("MAHOUTSUKAI_PLAYER_MAX_MANA");
+var mag = nbt.getCompound("ForgeCaps").getCompound("epic_stats_mod_remastered:player_variables").getDouble("stat_5_level");
+var x = e.player.x;
+var y = e.player.y;
+var z = e.player.z;
+
+if(e.id == 1){
+if(mana>100){
+nbt.getCompound("ForgeCaps").getCompound("mahoutsukai:mahou").setInteger("MAHOUTSUKAI_PLAYER_STORED_MANA",(mana-100));
+e.player.setEntityNbt(nbt);
+var d = Vectors((e.player.getRotation())*Math.PI/180,((-e.player.getPitch())*Math.PI/180),1);
+shootProjectileNBT(e.API,e.player,"{id: \"armourers_workshop:skin\" ,Count: 1b,tag: {ArmourersWorkshop: {SkinType: \"armourers:bow\" ,Identifier: \"db:jdXIJjt0pQ\" }}}","presh",mag,d[0],d[1]+1.2,d[2]);
+Shoot(e.player,"presh",1.75);
+
+}
+else{e.player.message("COCKS")}
+}
+
+
+}
+
+
+function projectileTick(e){
+if(e.projectile.getName() == "presh"){
+e.API.executeCommand(e.projectile.getWorld(),"particle dust 1 1 1 2 "+Number(e.projectile.x)+" "+Number(e.projectile.y)+" "+Number(e.projectile.z)+" 0 0 0 1 3 force");
+}
+}
+
+function  keyPressed(e){
+//F - 70 G - 71
+if(e.key == 70){
+if(BM == 0){
+e.player.timers.forceStart(1,5,false);
+}
+else if(BM == 1){
+e.player.timers.forceStart(2,5,false);
+}
+else if(BM == 2){
+e.player.timers.forceStart(3,5,false);
+}
+}
+
+if(e.key == 71){  
+scrollSpells(spells.length-1);
+e.player.message(spells[BM]);
+//log(e.player.getMainhandItem().getItemNbt().toJsonString());
+}
+}
+
+function scrollSpells(limit){
+if(BM<limit){
+BM++;
+}
+else{BM = 0}
+}
+
+function Shoot(e,name,speed){
+var V = Vectors(e.getRotation()*Math.PI/180,(-e.getPitch()*Math.PI/180),speed);
+var entt = e.world.getNearbyEntities(e.x,e.y,e.z,15,7);
+for (var i = 0; i<entt.length; i++){
+if(entt[i].getName()== name){
+entt[i].setMotionX(V[0])
+entt[i].setMotionY(V[1]);
+entt[i].setMotionZ(V[2]);
+}}
+}
+
+function shootProjectile(e,projectile,name,dmg,pos1,pos2,pos3){
+var P = e.world.createEntity('customnpcs:customnpcprojectile')
+var item = e.world.createItem(projectile,1);
+item.setCustomName(name);
+P.setName(name);
+var d = Vectors((e.getRotation())*Math.PI/180,((-e.getPitch())*Math.PI/180),10);
+P.setItem(item);
+P.setPosition(e.x+pos1,e.y+pos2,e.z+pos3);
+var n = P.getEntityNbt();
+n.setFloat("damagev2",dmg);
+n.setInteger("size",15);
+n.setBoolean("Render3D", true);
+//n.setFloat(n.getCompound("Rotation")[0],90.0);
+P.setEntityNbt(n);
+e.world.spawnEntity(P);
+P.enableEvents();
+//log(n.toJsonString());
+}
+
+function shootProjectileNBT(API,e,projectile,name,dmg,pos1,pos2,pos3){
+var P = e.world.createEntity('customnpcs:customnpcprojectile');
+var item = e.world.createItemFromNbt(API.stringToNbt(projectile));
+item.setCustomName(name);
+P.setName(name);
+var d = Vectors((e.getRotation())*Math.PI/180,((-e.getPitch())*Math.PI/180),10);
+P.setItem(item);
+P.setPosition(e.x+pos1,e.y+pos2,e.z+pos3);
+var n = P.getEntityNbt();
+n.setFloat("damagev2",dmg);
+n.setInteger("size",15);
+//n.setBoolean("Render3D", true);
+//n.setFloat(n.getCompound("Rotation")[0],90.0);
+P.setEntityNbt(n);
+e.world.spawnEntity(P);
+P.enableEvents();
+//log(n.toJsonString());
+}
+
+function Vectors(angle,pitch,distance){
+var dx = -Math.sin(angle)*(distance*Math.cos(pitch));
+var dy = Math.sin(pitch)*distance;
+var dz = Math.cos(angle)*(distance*Math.cos(pitch));
+return [dx,dy,dz]
+}
+
+
+function Circles(angle,pitch,distance){
+var a = angle*Math.PI/180;
+var b = pitch*Math.PI/180;
+var dx = -Math.sin(a)*distance*Math.cos(b);
+var dy = Math.sin(b)*distance
+var dz = Math.cos(a)*distance*Math.cos(b);
+return [dx,dy,dz];
+}
