@@ -1,0 +1,124 @@
+var r1 = 0;
+var r2 = 0;
+var r3 = 0;
+var rolled = 0;
+var combo = 0;
+
+
+function gamble(e){
+roll();
+var nbt = e.getEntityNbt();
+var mana = nbt.getCompound("ForgeCaps").getCompound("irons_spellbooks:player_magic").getInteger("mana");
+if(rolled >=3&& rolled <7){
+nbt.getCompound("ForgeCaps").getCompound("irons_spellbooks:player_magic").setInteger("mana",mana-mana);
+//e.setEntityNbt(nbt);
+combo = 0
+return "1/1/1\nBAD LUCK!";
+}
+else if(rolled >=7&& rolled <15){
+nbt.getCompound("ForgeCaps").getCompound("irons_spellbooks:player_magic").setInteger("mana",mana/4);
+//e.setEntityNbt(nbt);
+combo += 1;
+e.timers.forceStart(3,2,false);
+var v1= [Math.floor(Math.random() * 3) + 2];
+
+e.playSound("irons_spellbooks:entity.generic.fiery_explosion",1,1);
+return v1+"|"+v1+"|"+v1+"\nLET'S ROLL AGAIN!";
+}
+else if(rolled >=15&& rolled <21){
+nbt.getCompound("ForgeCaps").getCompound("irons_spellbooks:player_magic").setInteger("mana",mana/2);
+//e.setEntityNbt(nbt);
+combo += 3;
+e.timers.forceStart(4,2,true);
+e.timers.forceStart(2,60,false);
+var d1= [Math.floor(Math.random() * 3) + 4];
+
+e.playSound("irons_spellbooks:entity.generic.fiery_explosion",2,1);
+return d1+"|"+d1+"|"+d1+"\nLUCK IS IN THE AIR TONIGHT!\n";
+
+
+}
+else if(rolled>=21){
+combo = 0;
+e.playSound("irons_spellbooks:spell.eldritch_blast.cast",3,1);
+e.playSound("irons_spellbooks:entity.generic.fiery_explosion",1,2);
+e.timers.forceStart(5,2,true);
+e.timers.forceStart(6,60,false);
+return "7|7|7\n!JACKPOT!"
+}
+}
+
+function roll(){
+r1 =Math.floor(Math.random() * 7) + 1;
+r2 =Math.floor(Math.random() * 7) + 1;
+r3 =Math.floor(Math.random() * 7) + 1;
+rolled = (r1+r2+r3+combo);
+return r1+"|"+r2+"|"+r3+"\n Luck: "+ combo ;
+}
+
+function timer(e){
+var rot = e.player.getRotation();
+var pit = -(e.player.getPitch());
+
+if(e.id ==1){
+e.player.message(gamble(e.player));
+//e.player.message(roll());
+}
+
+if(e.id == 2){
+e.player.timers.stop(4);
+}
+
+if(e.id == 3){
+for (var b = 0;b<36;b+=1){
+var d = Circles(e.player.getRotation()+b*10,2,1);
+e.API.executeCommand(e.player.getWorld(),"particle dust 1 0 1 1 "+Number(e.player.x+d[0])+" "+Number(e.player.y+1+d[1])+" "+Number(e.player.z+d[2])+" 1 2 1 50 10 force");
+
+ }
+}
+
+if(e.id == 4){
+for (var b = 0;b<36;b+=1){
+var d = Circles(e.player.getRotation()+b*10,2,1);
+e.API.executeCommand(e.player.getWorld(),"particle dust 1 0 1 1 "+Number(e.player.x+d[0])+" "+Number(e.player.y+1+d[1])+" "+Number(e.player.z+d[2])+" 01 2 1 20 10 force");
+ }
+
+}
+
+if(e.id == 5){
+for (var b = 0;b<36;b+=1){
+var d = Circles(e.player.getRotation()+b*10,2,1);
+e.API.executeCommand(e.player.getWorld(),"particle dust 1 0 1 1 "+Number(e.player.x+d[0])+" "+Number(e.player.y+1+d[1])+" "+Number(e.player.z+d[2])+" 1.25 2 1.25 10 10 force");
+e.API.executeCommand(e.player.getWorld(),"particle dust 0 1 0.1 0.5 "+Number(e.player.x+d[0])+" "+Number(e.player.y+1+d[1])+" "+Number(e.player.z+d[2])+" 0.5 1.5 0.5 10 10 force");
+ }
+}
+
+if(e.id == 6){
+e.player.timers.stop(5);
+}
+}
+
+function chat(e){
+if(e.message == "GAMBA"){
+e.player.timers.forceStart(1,20,false);
+var r1 = 0;
+var r2 = 0;
+var r3 = 0;
+}
+}
+
+function Vectors(angle,pitch,distance){
+var dx = -Math.sin(angle)*(distance*Math.cos(pitch));
+var dy = Math.sin(pitch)*distance;
+var dz = Math.cos(angle)*(distance*Math.cos(pitch));
+return [dx,dy,dz]
+}
+
+function Circles(angle,pitch,distance){
+var a = angle*Math.PI/180;
+var b = pitch*Math.PI/180;
+var dx = -Math.sin(a)*distance*Math.cos(b);
+var dy = Math.sin(b)*distance
+var dz = Math.cos(a)*distance*Math.cos(b);
+return [dx,dy,dz];
+}
