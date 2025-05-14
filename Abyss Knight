@@ -1,0 +1,323 @@
+var par = 0;
+var par2 = 0;
+var r = 0;
+var swing = 30;
+function damaged(e){
+var r1 = Math.floor(Math.random() * 30) + 0;
+var move = [6,10,13];
+var r2 = Math.floor(Math.random() * 3) + 0;
+if(!e.npc.timers.has(2)){
+e.npc.timers.forceStart(move[r2],r1,false);
+}
+}
+
+function interact(e){
+//e.npc.timers.forceStart(13,10,false);
+}
+
+var pop = 0;
+
+function init(e){
+hit = 0;
+pop = 0;
+}
+
+var hit = 0;
+function meleeAttack(e){
+var handL = e.npc.getJob().getPart(1);
+var handR = e.npc.getJob().getPart(2);
+var body = e.npc.getJob().getPart(3);
+var legL = e.npc.getJob().getPart(4);
+var legR = e.npc.getJob().getPart(5);
+var head = e.npc.getJob().getPart(0);
+var handLq = e.npc.getJob().getPart(7);
+var handRq = e.npc.getJob().getPart(8);
+var bodyq = e.npc.getJob().getPart(9);
+var legLq = e.npc.getJob().getPart(10);
+var legRq = e.npc.getJob().getPart(11);
+var headq = e.npc.getJob().getPart(6);
+var rot = e.npc.getRotation();
+var pit = -(e.npc.getPitch())
+var x = e.npc.x;
+var y = e.npc.y;
+var z = e.npc.z;
+e.setCanceled(true);
+
+if(hit == 0){
+handR.setRotation(40,210,150);
+e.npc.timers.forceStart(100,20,false);
+e.npc.updateClient();
+}
+else if(hit == 1){
+handR.setRotation(90,180,100);
+e.npc.timers.forceStart(101,20,false);
+e.npc.updateClient();
+}
+else if(hit == 2){
+e.npc.timers.forceStart(3,5,false);
+}
+}
+
+function timer(e){
+var handL = e.npc.getJob().getPart(1);
+var handR = e.npc.getJob().getPart(2);
+var body = e.npc.getJob().getPart(3);
+var legL = e.npc.getJob().getPart(4);
+var legR = e.npc.getJob().getPart(5);
+var head = e.npc.getJob().getPart(0);
+var handLq = e.npc.getJob().getPart(7);
+var handRq = e.npc.getJob().getPart(8);
+var bodyq = e.npc.getJob().getPart(9);
+var legLq = e.npc.getJob().getPart(10);
+var legRq = e.npc.getJob().getPart(11);
+var headq = e.npc.getJob().getPart(6);
+var rot = e.npc.getRotation();
+var pit = -(e.npc.getPitch())
+var x = e.npc.x;
+var y = e.npc.y;
+var z = e.npc.z;
+
+if(e.id ==1){
+e.npc.stats.setImmune(1,true);
+e.npc.ai.setWalkingSpeed(6);
+e.npc.stats.melee.setRange(2);
+e.npc.stats.melee.setDelay(40);
+e.npc.stats.melee.setStrength(5);
+body.setRotation(180,180,180);
+head.setRotation(180,180,180);
+handL.setRotation(180,180,180);
+handR.setRotation(180,180,180);
+legL.setRotation(180,180,180);
+legR.setRotation(180,180,180);
+bodyq.setRotation(180,180,180);
+headq.setRotation(180,180,180);
+handLq.setRotation(180,180,180);
+handRq.setRotation(180,180,180);
+legLq.setRotation(180,180,180);
+legRq.setRotation(180,180,180);
+e.npc.ai.setStandingType(0);
+e.npc.inventory.setLeftHand( e.npc.world.createItem("minecraft:air",1));
+e.npc.updateClient();
+}
+
+if(e.id == 2){}
+
+if(e.id == 3){
+if(!e.npc.timers.has(2)){
+e.npc.ai.setWalkingSpeed(0);
+handR.setRotation(150,180,260);
+e.npc.stats.melee.setRange(1);
+e.npc.stats.melee.setStrength(0);
+e.npc.timers.forceStart(4,10,false);
+e.npc.updateClient();
+}
+}
+
+if(e.id == 4){
+e.npc.timers.forceStart(5,1,true);
+}
+
+if(e.id == 5){
+r+=40;
+e.npc.getMCEntity().m_5616_(r);
+for (var b = 0;b<36;b+=1){
+var d = Circles(e.npc.getRotation()+b*10,e.npc.getPitch(),2);
+e.npc.world.spawnParticle("cloud",e.npc.x+d[0],e.npc.y+1.5,e.npc.z+d[2],0,0,0,0,1);
+var entt = e.npc.world.getNearbyEntities(e.npc.x+d[0],e.npc.y+1+d[1],e.npc.z+d[2],1,5);
+for(var j=0;j<entt.length;j++){
+ if(entt[j].UUID == e.npc.UUID){
+continue;
+}
+entt[j].damage(5);
+}}
+if(r>400){
+e.npc.timers.stop(5);
+e.npc.timers.forceStart(1,15,false);
+r=0;
+hit = 0;
+}
+}
+
+if(e.id == 6){
+if(!e.npc.timers.has(2)){
+handR.setRotation(30,180,170);
+legL.setRotation(250,180,160);
+e.npc.setMotionY(1.1);
+e.npc.setPosition(x,y+0.5,z);
+e.npc.timers.forceStart(7,12,false);
+e.npc.stats.setImmune(1,false);
+e.npc.updateClient();
+e.npc.timers.forceStart(2,100,false);
+}
+}
+
+if(e.id == 7){
+legL.setRotation(150,180,160);
+head.setRotation(210,180,180);
+var V = Vectors(e.npc.getRotation()*Math.PI/180,e.npc.getPitch()*Math.PI/180,1);
+e.npc.setMotionY(-1);
+e.npc.setMotionX(V[0]);
+e.npc.setMotionZ(V[2]);
+e.npc.timers.forceStart(8,11,false);
+e.npc.timers.forceStart(9,1,true);
+e.npc.updateClient();
+
+}
+
+if(e.id == 8){
+for (var b = 0;b<36;b+=1){
+for (var a = 0;a<3;a+=1){
+var d = Circles(e.npc.getRotation()+b*10,e.npc.getPitch(),a);
+e.npc.world.spawnParticle("cloud",e.npc.x+d[0],e.npc.y+1.5,e.npc.z+d[2],0,0,0,0.075,5);
+var entt = e.npc.world.getNearbyEntities(e.npc.x+d[0],e.npc.y+1+d[1],e.npc.z+d[2],1,5);
+for(var j=0;j<entt.length;j++){
+ if(entt[j].UUID == e.npc.UUID){
+continue;
+}
+entt[j].damage(5);
+}}}
+e.npc.timers.forceStart(1,20,false);
+
+e.npc.world.playSoundAt(e.npc.getPos(),"epicfight:sfx.ground_slam",5,1);
+}
+
+if(e.id == 9){
+handR.setRotation(swing,160,170);
+e.npc.updateClient();
+if(swing < 170){
+swing +=45;
+}
+else{
+e.npc.timers.stop(9)
+swing = 0;
+}
+}
+
+if(e.id == 10){
+if(!e.npc.timers.has(2)){
+e.npc.ai.setStandingType(1);
+e.npc.ai.setWalkingSpeed(0);
+handR.setRotation(90,225,1);
+handL.setRotation(90,225,180);
+e.npc.timers.forceStart(11,25,false);
+e.npc.timers.forceStart(2,180,false);
+e.npc.updateClient();
+}
+}
+
+if(e.id == 11){
+e.npc.timers.forceStart(12,1,true);
+}
+
+if(e.id == 12){
+par+=30;
+par2+= 0.1;
+var d = Vectors(rot+par*Math.PI/180,pit*Math.PI/180,2);
+e.npc.world.spawnParticle("squid_ink",e.npc.x+d[0],e.npc.y+par2+1,e.npc.z+d[2],0,0,0,0,1);
+e.npc.world.spawnParticle("squid_ink",e.npc.x+d[0],e.npc.y+par2+0.5,e.npc.z+d[2],0,0,0,0,1);
+e.npc.world.spawnParticle("squid_ink",e.npc.x+d[0],e.npc.y+par2,e.npc.z+d[2],0,0,0,0,1);
+e.npc.world.spawnParticle("squid_ink",e.npc.x+d[0],e.npc.y+par2-0.5,e.npc.z+d[2],0,0,0,0,1);
+e.npc.world.spawnParticle("squid_ink",e.npc.x+d[0],e.npc.y+par2-1,e.npc.z+d[2],0,0,0,0,1);
+var entt = e.npc.world.getNearbyEntities(e.npc.x+d[0],e.npc.y,e.npc.z+d[2],1,5);
+for(var j=0;j<entt.length;j++){
+ if(entt[j].UUID == e.npc.UUID){
+continue;
+}
+entt[j].damage(5);
+}
+
+e.npc.world.playSoundAt(e.npc.getPos(),"epicacg:weapon.genshin_bow",5,1);
+
+if(par >660){
+e.npc.world.playSoundAt(e.npc.getPos(),"irons_spellbooks:spell.sonic_boom.cast",5,1);
+e.npc.timers.stop(12);
+e.npc.timers.forceStart(1,15,false);
+par = 0;
+par2 = 0;
+for (var a = -9;a<9;a+=1){
+for (var b = 0;b<36;b+=1){
+var d = Circles(e.npc.getRotation()+b*10,e.npc.getPitch()+a*10,3);
+e.npc.world.spawnParticle("squid_ink",e.npc.x+d[0],e.npc.y+d[1]+2,e.npc.z+d[2],0,0,0,0.3,1);
+var entt = e.npc.world.getNearbyEntities(e.npc.x+d[0],e.npc.y+1+d[1],e.npc.z+d[2],1,5);
+for(var j=0;j<entt.length;j++){
+ if(entt[j].UUID == e.npc.UUID){
+continue;
+}
+entt[j].damage(10);
+entt[j].addPotionEffect(2,3,5,false);
+
+}}}
+}
+}
+
+if(e.id == 13){
+if(!e.npc.timers.has(2)){
+e.npc.ai.setStandingType(1);
+e.npc.ai.setWalkingSpeed(0);
+handL.setRotation(90,210,180);
+e.npc.inventory.setLeftHand( e.npc.world.createItemFromNbt(e.API.stringToNbt("{id: \"armourers_workshop:skin\",Count: 1b,tag: {ArmourersWorkshop: {SkinType: \"armourers:item\",Identifier: \"db:cbj8ocCcIN\",SkinDyes: {\"armourers:dye_1\": -15198065}}}}")));
+e.npc.timers.forceStart(14,15,false);
+e.npc.timers.forceStart(2,70,false);
+e.npc.updateClient();
+}
+}
+
+if(e.id == 14){
+e.npc.setHealth(e.npc.getHealth()+20);
+e.npc.world.playSoundAt(e.npc.getPos(),"minecraft:entity.wandering_trader.drink_potion",5,1);
+e.npc.timers.forceStart(1,45,false);
+}
+
+if(e.id == 100){
+handR.setRotation(180,180,140);
+e.npc.timers.forceStart(1,20,false);
+e.npc.updateClient();
+e.npc.world.playSoundAt(e.npc.getPos(),"epicfight:entity.hit.blade",5,1);
+for (var b = -9;b<9;b+=1){
+var d = Circles(e.npc.getRotation(),e.npc.getPitch()+b*10,3);
+e.npc.world.spawnParticle("cloud",e.npc.x+d[0],e.npc.y+d[1],e.npc.z+d[2],0,0,0,0,1);
+var entt = e.npc.world.getNearbyEntities(e.npc.x+d[0],e.npc.y+d[1],e.npc.z+d[2],1,5);
+for(var j=0;j<entt.length;j++){
+ if(entt[j].UUID == e.npc.UUID){
+continue;
+}
+entt[j].damage(5);
+}}
+hit++;
+}
+
+if(e.id == 101){
+handR.setRotation(95,130,270);
+e.npc.timers.forceStart(1,20,false);
+e.npc.updateClient();
+e.npc.world.playSoundAt(e.npc.getPos(),"epicfight:entity.hit.blade",5,1);
+for (var b = 0;b<18;b+=1){
+var d = Circles(e.npc.getRotation()-90+b*10,e.npc.getPitch(),2);
+e.npc.world.spawnParticle("cloud",e.npc.x+d[0],e.npc.y+1.5,e.npc.z+d[2],0,0,0,0,1);
+var entt = e.npc.world.getNearbyEntities(e.npc.x+d[0],e.npc.y+1+d[1],e.npc.z+d[2],1,5);
+for(var j=0;j<entt.length;j++){
+ if(entt[j].UUID == e.npc.UUID){
+continue;
+}
+entt[j].damage(5);
+}}
+hit++;
+}
+
+}
+
+function Vectors(angle,pitch,distance){
+var dx = -Math.sin(angle)*(distance*Math.cos(pitch));
+var dy = Math.sin(pitch)*distance;
+var dz = Math.cos(angle)*(distance*Math.cos(pitch));
+return [dx,dy,dz]
+}
+
+function Circles(angle,pitch,distance){
+var a = angle*Math.PI/180;
+var b = pitch*Math.PI/180;
+var dx = -Math.sin(a)*distance*Math.cos(b);
+var dy = Math.sin(b)*distance
+var dz = Math.cos(a)*distance*Math.cos(b);
+return [dx,dy,dz];
+}
