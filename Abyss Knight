@@ -1,6 +1,7 @@
 var par = 0;
 var par2 = 0;
 var r = 0;
+var st = 0;
 var swing = 30;
 function damaged(e){
 var r1 = Math.floor(Math.random() * 30) + 0;
@@ -12,14 +13,17 @@ e.npc.timers.forceStart(move[r2],r1,false);
 }
 
 function interact(e){
-//e.npc.timers.forceStart(13,10,false);
+if(st == 0){
+e.npc.timers.forceStart(99,1,true);
+st++;
+}
 }
 
-var pop = 0;
-
+var headA = 220;
+var RAA = 335;
 function init(e){
 hit = 0;
-pop = 0;
+st = 0
 }
 
 var hit = 0;
@@ -44,18 +48,25 @@ var z = e.npc.z;
 e.setCanceled(true);
 
 if(hit == 0){
+if(!e.npc.timers.has(2)){
 handR.setRotation(40,210,150);
 e.npc.timers.forceStart(100,20,false);
+e.npc.timers.forceStart(2,70,false);
 e.npc.updateClient();
-}
+}}
 else if(hit == 1){
+if(!e.npc.timers.has(2)){
 handR.setRotation(90,180,100);
 e.npc.timers.forceStart(101,20,false);
+e.npc.timers.forceStart(2,70,false);
 e.npc.updateClient();
-}
+}}
 else if(hit == 2){
+if(!e.npc.timers.has(2)){
 e.npc.timers.forceStart(3,5,false);
-}
+e.npc.timers.forceStart(2,70,false);
+}}
+
 }
 
 function timer(e){
@@ -100,17 +111,17 @@ e.npc.inventory.setLeftHand( e.npc.world.createItem("minecraft:air",1));
 e.npc.updateClient();
 }
 
-if(e.id == 2){}
+if(e.id == 2){
+
+}
 
 if(e.id == 3){
-if(!e.npc.timers.has(2)){
 e.npc.ai.setWalkingSpeed(0);
 handR.setRotation(150,180,260);
 e.npc.stats.melee.setRange(1);
 e.npc.stats.melee.setStrength(0);
 e.npc.timers.forceStart(4,10,false);
 e.npc.updateClient();
-}
 }
 
 if(e.id == 4){
@@ -174,7 +185,7 @@ for(var j=0;j<entt.length;j++){
  if(entt[j].UUID == e.npc.UUID){
 continue;
 }
-entt[j].damage(5);
+entt[j].damage(15);
 }}}
 e.npc.timers.forceStart(1,20,false);
 
@@ -200,7 +211,7 @@ e.npc.ai.setWalkingSpeed(0);
 handR.setRotation(90,225,1);
 handL.setRotation(90,225,180);
 e.npc.timers.forceStart(11,25,false);
-e.npc.timers.forceStart(2,180,false);
+e.npc.timers.forceStart(2,160,false);
 e.npc.updateClient();
 }
 }
@@ -243,7 +254,7 @@ for(var j=0;j<entt.length;j++){
  if(entt[j].UUID == e.npc.UUID){
 continue;
 }
-entt[j].damage(10);
+entt[j].damage(20);
 entt[j].addPotionEffect(2,3,5,false);
 
 }}}
@@ -256,6 +267,7 @@ e.npc.ai.setStandingType(1);
 e.npc.ai.setWalkingSpeed(0);
 handL.setRotation(90,210,180);
 e.npc.inventory.setLeftHand( e.npc.world.createItemFromNbt(e.API.stringToNbt("{id: \"armourers_workshop:skin\",Count: 1b,tag: {ArmourersWorkshop: {SkinType: \"armourers:item\",Identifier: \"db:cbj8ocCcIN\",SkinDyes: {\"armourers:dye_1\": -15198065}}}}")));
+e.npc.world.playSoundAt(e.npc.getPos(),"minecraft:entity.wandering_trader.drink_potion",5,1);
 e.npc.timers.forceStart(14,15,false);
 e.npc.timers.forceStart(2,70,false);
 e.npc.updateClient();
@@ -263,7 +275,7 @@ e.npc.updateClient();
 }
 
 if(e.id == 14){
-e.npc.setHealth(e.npc.getHealth()+20);
+e.npc.setHealth(e.npc.getHealth()+60);
 e.npc.world.playSoundAt(e.npc.getPos(),"minecraft:entity.wandering_trader.drink_potion",5,1);
 e.npc.timers.forceStart(1,45,false);
 }
@@ -271,6 +283,7 @@ e.npc.timers.forceStart(1,45,false);
 if(e.id == 100){
 handR.setRotation(180,180,140);
 e.npc.timers.forceStart(1,20,false);
+e.npc.timers.forceStart(2,20,false);
 e.npc.updateClient();
 e.npc.world.playSoundAt(e.npc.getPos(),"epicfight:entity.hit.blade",5,1);
 for (var b = -9;b<9;b+=1){
@@ -289,6 +302,7 @@ hit++;
 if(e.id == 101){
 handR.setRotation(95,130,270);
 e.npc.timers.forceStart(1,20,false);
+e.npc.timers.forceStart(2,20,false);
 e.npc.updateClient();
 e.npc.world.playSoundAt(e.npc.getPos(),"epicfight:entity.hit.blade",5,1);
 for (var b = 0;b<18;b+=1){
@@ -304,6 +318,24 @@ entt[j].damage(5);
 hit++;
 }
 
+if(e.id == 99){
+head.setRotation(headA,180,180);
+if(headA>180){
+headA -=1;
+}
+handR.setRotation(100,200,RAA);
+if(RAA>180){
+RAA -=5;
+}
+else{
+e.npc.timers.forceStart(1,20,false);
+e.npc.timers.stop(99);
+e.npc.setFaction(2);
+e.npc.world.playSoundAt(e.npc.getPos(),"cdmoveset:sfx.seethrough",5,1);
+}
+e.npc.updateClient();
+}
+
 }
 
 function Vectors(angle,pitch,distance){
@@ -312,6 +344,7 @@ var dy = Math.sin(pitch)*distance;
 var dz = Math.cos(angle)*(distance*Math.cos(pitch));
 return [dx,dy,dz]
 }
+
 
 function Circles(angle,pitch,distance){
 var a = angle*Math.PI/180;
