@@ -1,21 +1,21 @@
 var spells = ["Air Pressure","SPELL2","SPELL3"];
 var BM = 0;
-
+// -TIME, ICE, LIGHTNING, MENTAL-
 function timer(e){
 var nbt = e.player.getEntityNbt();
-var mana = nbt.getCompound("ForgeCaps").getCompound("mahoutsukai:mahou").getInteger("MAHOUTSUKAI_PLAYER_STORED_MANA");
-var maxMana = nbt.getCompound("ForgeCaps").getCompound("mahoutsukai:mahou").getInteger("MAHOUTSUKAI_PLAYER_MAX_MANA");
+var mana = nbt.getCompound("ForgeCaps").getCompound("irons_spellbooks:player_magic").getInteger("mana");
 var mag = nbt.getCompound("ForgeCaps").getCompound("epic_stats_mod_remastered:player_variables").getDouble("stat_5_level");
+var int = nbt.getCompound("ForgeCaps").getCompound("epic_stats_mod_remastered:player_variables").getDouble("stat_4_level");
 var x = e.player.x;
 var y = e.player.y;
 var z = e.player.z;
 
 if(e.id == 1){
 if(mana>100){
-nbt.getCompound("ForgeCaps").getCompound("mahoutsukai:mahou").setInteger("MAHOUTSUKAI_PLAYER_STORED_MANA",(mana-100));
+nbt.getCompound("ForgeCaps").getCompound("irons_spellbooks:player_magic").setInteger("mana",(mana-100));
 e.player.setEntityNbt(nbt);
 var d = Vectors((e.player.getRotation())*Math.PI/180,((-e.player.getPitch())*Math.PI/180),1);
-shootProjectileNBT(e.API,e.player,"{id: \"armourers_workshop:skin\" ,Count: 1b,tag: {ArmourersWorkshop: {SkinType: \"armourers:bow\" ,Identifier: \"db:jdXIJjt0pQ\" }}}","presh",mag,d[0],d[1]+1.2,d[2]);
+shootProjectile(e.player,"minecraft:stone_button","presh",mag,d[0],d[1]+1.2,d[2],5);
 Shoot(e.player,"presh",1.75);
 
 }
@@ -71,7 +71,7 @@ entt[i].setMotionZ(V[2]);
 }}
 }
 
-function shootProjectile(e,projectile,name,dmg,pos1,pos2,pos3){
+function shootProjectile(e,projectile,name,dmg,pos1,pos2,pos3,size){
 var P = e.world.createEntity('customnpcs:customnpcprojectile')
 var item = e.world.createItem(projectile,1);
 item.setCustomName(name);
@@ -81,7 +81,7 @@ P.setItem(item);
 P.setPosition(e.x+pos1,e.y+pos2,e.z+pos3);
 var n = P.getEntityNbt();
 n.setFloat("damagev2",dmg);
-n.setInteger("size",15);
+n.setInteger("size",size);
 n.setBoolean("Render3D", true);
 //n.setFloat(n.getCompound("Rotation")[0],90.0);
 P.setEntityNbt(n);
