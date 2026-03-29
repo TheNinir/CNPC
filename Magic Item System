@@ -1,0 +1,74 @@
+var dr = 100;
+function tick(e){
+if(dr<101){
+e.item.setDurabilityShow(true);
+e.item.setDurabilityValue(dr/100);
+dr+=10;
+}
+else{e.item.setDurabilityShow(false);}
+}
+
+function init(e){
+var dr = 100;
+e.item.setTexture("mine_fargo:gold_soul_stone");
+e.item.setDurabilityShow(false);
+e.item.setCustomName("§b§6Golden Magic");
+}
+
+function interact(e){
+var Thread = Java.type("java.lang.Thread");
+var Two = Java.extend(Thread,{
+run: function(){
+if(dr>101){
+e.item.setDurabilityShow(false);
+dr=0;
+for (var b = 0;b<36;b+=1){
+var d = Circles(e.player.getRotation()+b*10,e.player.getPitch(),2);
+e.player.world.spawnParticle("wax_on",e.player.x+d[0],e.player.y,e.player.z+d[2],0,4,0,0,20);
+Thread.sleep(22);
+e.player.world.playSoundAt(e.player.getPos(),"ars_nouveau:fire_family",5,1);
+}
+for (var c = 36;c>0;c-=1){
+var d = Circles(e.player.getRotation()+c*10,e.player.getPitch(),2);
+Thread.sleep(12);
+}
+Thread.sleep(1200);
+var d = Vectors(e.player.getRotation()*Math.PI/180,(-e.player.getPitch())*Math.PI/180,2);
+e.player.world.playSoundAt(e.player.getPos(),"ars_nouveau:fire_family_2",5,1);
+for(var i = 0;i<20;i+=0.5){
+var x = e.player.x;
+var y = e.player.y;
+var z = e.player.z;
+e.player.world.spawnParticle("wax_on",d[0]*i+x,d[1]*i+y+1,d[2]*i+z,0.5,0.5,0.5,0,31);
+var ent = e.player.world.getNearbyEntities(d[0]*i+x,d[1]*i+y,d[2]*i+z,1,5);
+Thread.sleep(5);
+for(var j=0;j<ent.length;j++){
+if(ent[j].UUID == e.player.UUID){
+continue;
+ }
+ if(ent[j] != null){
+ent[j].damage(20,e.player);
+}
+}} 
+}else{e.player.message("STILL ON COOLDOWN")}
+}});
+var G = new Two();
+G.start();
+
+function Vectors(angle,pitch,distance){
+var dx = -Math.sin(angle)*(distance*Math.cos(pitch));
+var dy = Math.sin(pitch)*distance;
+var dz = Math.cos(angle)*(distance*Math.cos(pitch));
+return [dx,dy,dz]
+}
+
+
+function Circles(angle,pitch,distance){
+var a = angle*Math.PI/180;
+var b = pitch*Math.PI/180;
+var dx = -Math.sin(a)*distance*Math.cos(b);
+var dy = Math.sin(b)*distance
+var dz = Math.cos(a)*distance*Math.cos(b);
+return [dx,dy,dz];
+}
+}
