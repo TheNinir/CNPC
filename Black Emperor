@@ -1,0 +1,225 @@
+var spells = ["Eloquence: Anger","Eloquence: Confusion"];
+var BM = 0;
+function timer(e){
+var nbt = e.player.getEntityNbt();
+var mana = nbt.getCompound("ForgeCaps").getCompound("irons_spellbooks:player_magic").getInteger("mana");
+var maxmana = 100;
+
+if(e.id == 1){
+if(true){
+var x = e.player.x;
+var y = e.player.y;
+var z = e.player.z;
+var rot = e.player.getRotation();
+var pit = -e.player.getPitch();
+try{
+
+var tg = e.player.rayTraceEntities(10,false,false)[0];
+var entt = tg.world.getNearbyEntities(tg.x,tg.y,tg.z,10,5);
+var cent = [];
+for(var j=0;j<entt.length;j++){
+ if(entt[j].UUID == tg.UUID){
+continue;
+}
+cent.unshift(entt[j]);
+}
+
+cent.sort(function(a,b){
+    if(tg.pos.distanceTo(a.pos) < tg.pos.distanceTo(b.pos)) {
+        return -1;
+    }
+    if(tg.pos.distanceTo(a.pos) > tg.pos.distanceTo(b.pos)) {
+        return 1;
+    }
+    return 0;
+});
+for(var i=0;i<cent.length;i++){
+e.player.message(cent[i].getName());
+}
+tg.setAttackTarget(cent[0]);
+if(tg.getAttackTarget() != null){e.player.message(tg.getName()+" | "+tg.getAttackTarget().getName());}
+
+}
+catch(ee){e.player.message(ee)}
+}
+else{e.player.message("COCKS")}
+}
+
+if(e.id == 2){
+if(true){
+var x = e.player.x;
+var y = e.player.y;
+var z = e.player.z;
+var rot = e.player.getRotation();
+var pit = -e.player.getPitch();
+try{
+var tg = e.player.rayTraceEntities(10,false,false)[0];
+tg.setAttackTarget(null);
+if(tg.getAttackTarget() != null){e.player.message(tg.getName()+" | "+tg.getAttackTarget().getName());}
+
+}
+catch(ee){e.player.message(ee)}
+}
+else{e.player.message("COCKS")}
+}
+
+if(e.id == 3){
+if(mana>=maxmana){
+
+}
+else{e.player.message("COCKS")}
+
+}
+
+if(e.id == 4){
+if(mana>=maxmana){
+
+}
+else{e.player.message("COCKS")}
+}
+
+}
+
+
+function projectileTick(e){
+
+}
+
+function  keyPressed(e){
+//F - 70 G - 71
+if(e.key == 70){
+if(BM == 0){
+e.player.timers.forceStart(1,15,false);
+}
+else if(BM == 1){
+//e.player.timers.forceStart(2,5,false);
+}
+else if(BM == 2){
+//e.player.timers.forceStart(3,5,false);
+}
+else if(BM == 3){
+//e.player.timers.forceStart(4,5,false);
+}
+}
+
+if(e.key == 71){  
+scrollSpells(spells.length-1);
+e.player.message(spells[BM]);
+//log(e.player.getMainhandItem().getItemNbt().toJsonString());
+}
+}
+
+function scrollSpells(limit){
+if(BM<limit){
+BM++;
+}
+else{BM = 0}
+}
+
+function Shoot(e,name,speed){
+var V = Vectors(e.getRotation()*Math.PI/180,(-e.getPitch()*Math.PI/180),speed);
+var entt = e.world.getNearbyEntities(e.x,e.y,e.z,15,7);
+for (var i = 0; i<entt.length; i++){
+if(entt[i].getName()== name){
+entt[i].setMotionX(V[0])
+entt[i].setMotionY(V[1]);
+entt[i].setMotionZ(V[2]);
+}}
+}
+
+function shootProjectile(e,projectile,name,dmg,pos1,pos2,pos3,size){
+var P = e.world.createEntity('customnpcs:customnpcprojectile')
+var item = e.world.createItem(projectile,1);
+item.setCustomName(name);
+P.setName(name);
+var d = Vectors((e.getRotation())*Math.PI/180,((-e.getPitch())*Math.PI/180),10);
+P.setItem(item);
+P.setPosition(e.x+pos1,e.y+pos2,e.z+pos3);
+var n = P.getEntityNbt();
+n.setFloat("damagev2",dmg);
+n.setInteger("size",size);
+n.setBoolean("Render3D", true);
+//n.setFloat(n.getCompound("Rotation")[0],90.0);
+P.setEntityNbt(n);
+e.world.spawnEntity(P);
+P.enableEvents();
+//log(n.toJsonString());
+}
+
+function shootProjectileNBT(API,e,projectile,name,dmg,pos1,pos2,pos3){
+var P = e.world.createEntity('customnpcs:customnpcprojectile');
+var item = e.world.createItemFromNbt(API.stringToNbt(projectile));
+item.setCustomName(name);
+P.setName(name);
+var d = Vectors((e.getRotation())*Math.PI/180,((-e.getPitch())*Math.PI/180),10);
+P.setItem(item);
+P.setPosition(e.x+pos1,e.y+pos2,e.z+pos3);
+var n = P.getEntityNbt();
+n.setFloat("damagev2",dmg);
+n.setInteger("size",15);
+//n.setBoolean("Render3D", true);
+//n.setFloat(n.getCompound("Rotation")[0],90.0);
+P.setEntityNbt(n);
+e.world.spawnEntity(P);
+P.enableEvents();
+//log(n.toJsonString());
+}
+
+function Vectors(angle,pitch,distance){
+var dx = -Math.sin(angle)*(distance*Math.cos(pitch));
+var dy = Math.sin(pitch)*distance;
+var dz = Math.cos(angle)*(distance*Math.cos(pitch));
+return [dx,dy,dz]
+}
+
+
+function Circles(angle,pitch,distance){
+var a = angle*Math.PI/180;
+var b = pitch*Math.PI/180;
+var dx = -Math.sin(a)*distance*Math.cos(b);
+var dy = Math.sin(b)*distance
+var dz = Math.cos(a)*distance*Math.cos(b);
+return [dx,dy,dz];
+}
+
+function sequenceDamage(seq){
+switch(seq){
+  case 9:
+    seq = 10;
+    break;
+  case 8:
+    seq = 15
+    break;
+      case 7:
+   seq = 20
+    break;
+  case 6:
+    seq = 40
+    break;
+      case 5:
+   seq = 80
+    break;
+  case 4:
+    seq = 120
+    break;
+      case 3:
+    seq = 250
+    break;
+  case 2: 
+    seq = 500
+    break;
+      case 1: 
+    seq = 750
+    break;
+  case 0: 
+    seq = 1000
+    break;
+    case 10:
+    seq = 1550
+    break;
+}
+
+return (seq);
+
+}
+
